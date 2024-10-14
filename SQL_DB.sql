@@ -108,7 +108,7 @@ FROM prestamos
 JOIN libros ON prestamos.codigo_libro = libros.codigo_libro_id
 GROUP BY nombre_libro, codigo_libro;
 
--- 3. Books that each user has requested as SQL
+-- 3. Books that each user has requested
 
 SELECT 
 	usuarios.nombres,
@@ -167,3 +167,16 @@ FROM prestamos
 JOIN libros ON prestamos.codigo_libro = libros.codigo_libro_id
 JOIN usuarios ON prestamos.codigo_usuario = usuarios.codigo_usuarios_id
 GROUP BY libros.autor;
+
+-- All information share through all the tables 
+
+USE biblioteca_db;
+SELECT * 
+FROM prestamos
+LEFT JOIN usuarios
+ON prestamos.codigo_usuario = usuarios.codigo_usuarios_id
+UNION
+SELECT * 
+FROM prestamos
+RIGHT JOIN usuarios
+ON prestamos.codigo_usuario = usuarios.codigo_usuarios_id;

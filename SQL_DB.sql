@@ -148,7 +148,7 @@ JOIN libros ON prestamos.codigo_libro = libros.codigo_libro_id
 JOIN usuarios ON prestamos.codigo_usuario = usuarios.codigo_usuarios_id
 GROUP BY usuarios.departamento;
 
--- 6. Books read by each month
+-- 6. Books read by each month 
 
 SELECT 
 	prestamos.fecha_salida,

@@ -133,6 +133,33 @@ def  Update_info():
         if  info_specific == 5:
             break;
 
+# Delete all the information related with that email
+
+def Delete_info():
+    # os.system('clear')
+    
+    # First we need to find  the id related with the email
+    query_1 = "SELECT cliente_id FROM cliente WHERE email = %s" 
+    mycursor.execute(query_1, (email_verify,))
+    myresult = mycursor.fetchall()
+
+    """ find the ID related with that email
+        and shows as int """
+    data = myresult
+    data_int = data[0][0]
+
+    # Confirm to delete the row
+    sure = input("y/n")
+    if sure  == "y":
+        query_2 = "DELETE FROM cliente WHERE cliente_id  = %s"
+        mycursor.execute(query_2, (data_int,))
+        mydb.commit()
+        print("Your information has been successfully deleted!!")
+        exit()
+
+
+
+    
 
 
 
@@ -143,7 +170,6 @@ def  Update_info():
                 
 
         
-
 
 Messgae_Starting ="Welcome, please login with your credentials"
 print(Messgae_Starting.upper())
@@ -164,6 +190,7 @@ while True:
         
         # Validate if the  email is on the DB
         if len(result) >  0:
+            print(len(result))
             print("Client Exist, now  you can login")
             login_acces_won = input("""Now which options you would like to do:
                                         1. Update your personal information
@@ -174,11 +201,19 @@ while True:
             if login_acces_won == "1":
                 os.system('clear')
                 Update_info()
+            elif  login_acces_won == "2":
+                os.system('clear')
+                Delete_info()
         else:
+            print(len(result))
             print("Option no valid, create an account")
-            Create_email() 
-    else:
-        print("Email is not valid")
+            Create_email()
+            break;
         
+    else:
+        print("Email format is not valid")
+        break
+        
+
     
     

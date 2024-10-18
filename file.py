@@ -1,6 +1,9 @@
 import mysql.connector
 import re
+import os
+import time
 
+# Variable to update the email on file 
 global email_verify
 
 # Conexion Py con SQL DB remote
@@ -43,6 +46,7 @@ def  Update_info():
 
 
     while True:
+        os.system('clear')
         info_specific = int(input("""Which details you would to change it:
                                     1. Legal name
                                     2. phone number
@@ -53,6 +57,8 @@ def  Update_info():
                                 """))
         # update legal name
         if info_specific == 1:
+                os.system('clear')
+                
                 legal_nameChanged = input("Which is your new legal name: ")
                 
                 if legal_nameChanged == "":
@@ -63,44 +69,58 @@ def  Update_info():
                     mycursor.execute(query, (legal_nameChanged, email_verify))
                     mydb.commit()   
                     print("Your legal name has been successfully changed!!") 
+                    time.sleep(2)
         
         # update phone number 
         if info_specific == 2:
+            os.system('clear')
+            
             phoneNumber_changed = input("Which is your new phone number (use indicative): ")
             query = "UPDATE cliente SET telefono =  %s WHERE email = %s"
             
             mycursor.execute(query, (phoneNumber_changed, email_verify))
             mydb.commit()
             print("Your phone number has been successfully changed!!")
+            time.sleep(2)
 
         # update email address 
         if  info_specific == 3:
-            email_changed = input("Which is your new email address: ")
+        
+            while True:
+                os.system('clear')
             
-            if (Validation_email(email_changed)):
+                email_changed = input("Which is your new email address: ")
+            
+                if (Validation_email(email_changed)):
                 
-                query_1 = "SELECT * from cliente  WHERE email = %s"
-                mycursor.execute(query_1, (email_changed,))
-                myresult = mycursor.fetchall()
-                
-                if (len(myresult) > 0):
-                    print("This email is already in use!!, try another one")
-                else:
-                    query_2 = "UPDATE cliente SET email = %s WHERE email = %s"
-                
-                    mycursor.execute(query_2, (email_changed, email_verify))
-                    mydb.commit()
+                    query_1 = "SELECT * from cliente  WHERE email = %s"
+                    mycursor.execute(query_1, (email_changed,))
+                    myresult = mycursor.fetchall()
                     
-                    """ After to update the email, that new one may be equal
-                    as the first input when they start the program to validate
-                    again on the DB """
-                    email_verify = email_changed  
-                    print("Your email address has been successfully changed!!")
-            else:
-                print("Enter a valid email")
+                    if (len(myresult) > 0):
+                        print("This email is already in use!!, try another one")
+                        time.sleep(2)
+                    else:
+                        query_2 = "UPDATE cliente SET email = %s WHERE email = %s"
+                    
+                        mycursor.execute(query_2, (email_changed, email_verify))
+                        mydb.commit()
+                        
+                        """ After to update the email, that new one may be equal
+                        as the first input when they start the program to validate
+                        again on the DB """
+                        email_verify = email_changed  
+                        print("Your email address has been successfully changed!!")
+                        time.sleep(2)
+                        break;
+                else:
+                    print("Enter a valid email")
+                    time.sleep(2)
                 
         # update city and address 
         if  info_specific == 4:
+            os.system('clear')
+            
             city_changed = input("Which is your new city: ")
             address_changed = input("Which is your new address: ")
             
@@ -108,6 +128,7 @@ def  Update_info():
             mycursor.execute(query_cityAddr,  (city_changed, address_changed, email_verify))
             mydb.commit()
             print("Your  city and address has been successfully changed!!")
+            time.sleep(2)
 
         if  info_specific == 5:
             break;
@@ -130,29 +151,34 @@ print(Messgae_Starting.upper())
 # email request to verify the client
 email_verify = input("Email: ")
 
-if Validation_email(email_verify):
-    
-    #  validate that the client has a email on file 
-    query = "SELECT * FROM cliente WHERE email = %s"
-    
-    mycursor.execute(query,(email_verify,))
-    result = mycursor.fetchall()
-    
-    # Validate if the  email is on the DB
-    if len(result) >  0:
-        print("Client Exist, now  you can login")
-        login_acces_won = input("""Now which options you would like to do:
-                                    1. Update your personal information
-                                    2. Delete your information
-                                    3. Find the list of products that you  have purchased
-                                    4. Buy a new product -- 
-                                """)
-    if login_acces_won == "1":
-        Update_info()
+while True:
+    os.system('clear')
+
+    if Validation_email(email_verify):
+        
+        #  validate that the client has a email on file 
+        query = "SELECT * FROM cliente WHERE email = %s"
+        
+        mycursor.execute(query,(email_verify,))
+        result = mycursor.fetchall()
+        
+        # Validate if the  email is on the DB
+        if len(result) >  0:
+            print("Client Exist, now  you can login")
+            login_acces_won = input("""Now which options you would like to do:
+                                        1. Update your personal information
+                                        2. Delete your information
+                                        3. Find the list of products that you  have purchased
+                                        4. Buy a new product -- 
+                                    """)
+            if login_acces_won == "1":
+                os.system('clear')
+                Update_info()
+        else:
+            print("Option no valid, create an account")
+            Create_email() 
     else:
-        print("Option no valid, create an account")
-        Create_email() 
-else:
-    print("Email is not valid")
+        print("Email is not valid")
+        
     
     

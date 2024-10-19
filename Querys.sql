@@ -14,11 +14,9 @@ SELECT
     cliente.nombre,
     cliente.edad,
     cliente.ciudad,
-    
-    venta.venta_id AS "VENTA ID",
-    venta.cliente_id AS "VENTA CLIENTE ID",
-    venta.cantidad,
-    
+    -- venta.venta_id AS "VENTA ID",
+    -- venta.cliente_id AS "VENTA CLIENTE ID",
+    venta.cantidad,  
     producto.producto_id,
     producto.tipo_producto,
     producto.descripcion,

@@ -136,7 +136,7 @@ def  Update_info():
 # Delete all the information related with that email
 
 def Delete_info():
-    # os.system('clear')
+    os.system('clear')
     
     # First we need to find  the id related with the email
     query_1 = "SELECT cliente_id FROM cliente WHERE email = %s" 
@@ -149,7 +149,7 @@ def Delete_info():
     data_int = data[0][0]
 
     # Confirm to delete the row
-    sure = input("y/n")
+    sure = input("s/n: ")
     if sure  == "y":
         query_2 = "DELETE FROM cliente WHERE cliente_id  = %s"
         mycursor.execute(query_2, (data_int,))
@@ -158,6 +158,41 @@ def Delete_info():
         exit()
 
 
+# Find the products related with that specific client
+def Find_products():
+    
+    print("You will see all the products related with your information",'\n')
+    
+    query_product = """
+    SELECT
+        cliente.nombre,
+        cliente.edad,
+        cliente.ciudad,
+        venta.cantidad,
+        producto.producto_id,
+        producto.tipo_producto,
+        producto.descripcion,
+        producto.precio
+    FROM cliente 
+    JOIN venta ON cliente.cliente_id = venta.cliente_id
+    JOIN venta_producto ON venta.venta_id = venta_producto.venta_id
+    JOIN producto ON venta_producto.producto_id = producto.producto_id
+    """
+
+
+    mycursor.execute(query_product)
+    result_query = mycursor.fetchall()
+
+    # name column required by Quey
+    column_names = [i[0] for i in mycursor.description]
+        
+    print(column_names)
+    print(result_query)
+        
+    input("\n Press enter to go  back to the main menu...")
+
+
+    
 
     
 
@@ -190,22 +225,25 @@ while True:
         
         # Validate if the  email is on the DB
         if len(result) >  0:
-            print(len(result))
             print("Client Exist, now  you can login")
-            login_acces_won = input("""Now which options you would like to do:
-                                        1. Update your personal information
-                                        2. Delete your information
-                                        3. Find the list of products that you  have purchased
-                                        4. Buy a new product -- 
-                                    """)
+            login_acces_won = input("""
+                Now which options you would like to do:
+                1. Update your personal information
+                2. Delete your information
+                3. Find the list of products that you  have purchased
+                4. Buy a new product --
+                >/: """)
             if login_acces_won == "1":
                 os.system('clear')
                 Update_info()
             elif  login_acces_won == "2":
                 os.system('clear')
                 Delete_info()
+            elif  login_acces_won == "3":
+                os.system('clear')
+                Find_products()
+
         else:
-            print(len(result))
             print("Option no valid, create an account")
             Create_email()
             break;

@@ -47,14 +47,15 @@ def  Update_info():
 
     while True:
         os.system('clear')
-        info_specific = int(input("""Which details you would to change it:
-                                    1. Legal name
-                                    2. phone number
-                                    3. email
-                                    4. city and address 
-                                    >/: 
-            
-                                """))
+        info_specific = int(input("""
+        Which details you would to change it:
+        1. Legal name
+        2. phone number
+        3. email
+        4. city and address 
+        >/: 
+        """))
+        
         # update legal name
         if info_specific == 1:
                 os.system('clear')
@@ -242,7 +243,8 @@ while True:
             elif  login_acces_won == "3":
                 os.system('clear')
                 Find_products()
-
+            elif  login_acces_won == "5":
+                break;
         else:
             print("Option no valid, create an account")
             Create_email()

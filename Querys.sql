@@ -1,6 +1,6 @@
 SELECT * FROM cliente;
 SELECT * FROM tipo_producto;
-SELECT * FROM producto;
+SELECT * FROM producto;	
 SELECT * FROM venta;	
 SELECT * FROM venta_producto;
 
@@ -16,7 +16,7 @@ SELECT
     cliente.ciudad,
     -- venta.venta_id AS "VENTA ID",
     -- venta.cliente_id AS "VENTA CLIENTE ID",
-    venta.cantidad,  
+    venta.cantidad,
     producto.producto_id,
     producto.tipo_producto,
     producto.descripcion,

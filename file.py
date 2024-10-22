@@ -165,19 +165,38 @@ def Find_products():
     print("You will see all the products related with your information",'\n')
     
     query_product = """
-    SELECT
-        cliente.nombre,
-        cliente.edad,
-        cliente.ciudad,
-        venta.cantidad,
-        producto.producto_id,
-        producto.tipo_producto,
-        producto.descripcion,
-        producto.precio
-    FROM cliente 
-    JOIN venta ON cliente.cliente_id = venta.cliente_id
-    JOIN venta_producto ON venta.venta_id = venta_producto.venta_id
-    JOIN producto ON venta_producto.producto_id = producto.producto_id
+SELECT
+	cliente.cliente_id,
+    cliente.nombre,
+    venta.cantidad,  
+    producto.descripcion,
+    producto.tipo_producto,
+    categoria,
+    producto.precio
+FROM cliente 
+JOIN venta ON cliente.cliente_id = venta.cliente_id
+JOIN venta_producto ON venta.venta_id = venta_producto.venta_id
+JOIN producto ON venta_producto.producto_id = producto.producto_id
+JOIN tipo_producto ON tipo_producto.tipo_producto_id = producto.producto_id;
+    """
+    
+    """
+    
+        Si deseo comprar algun producto debo primero:
+            1. comprar > llevaria a selccionar que tipo de producto 
+                luego el producto en especifico.
+                
+            2. finalizar la compra 
+            
+            ------------------------
+            
+            3. internamente tenemos que:
+                    - si ya existe una sesion asociado a un correo debemos 
+                    mostrar que tipo de productos existen y cual en especifico desea
+                    
+                    -     
+        
+    
     """
 
 
@@ -188,7 +207,8 @@ def Find_products():
     column_names = [i[0] for i in mycursor.description]
         
     print(column_names)
-    print(result_query)
+    for row in result_query:
+        print(row)
         
     input("\n Press enter to go  back to the main menu...")
 

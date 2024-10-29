@@ -1,6 +1,13 @@
 CREATE DATABASE company;
 USE company;
 
+# BASIC QUERYS 
+SELECT * FROM cliente;
+SELECT * FROM tipo_producto;
+SELECT * FROM producto;
+SELECT * FROM venta;
+SELECT * FROM venta_producto;
+
 CREATE TABLE cliente(
 	cliente_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,

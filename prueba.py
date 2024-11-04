@@ -39,9 +39,6 @@ ctk.set_default_color_theme("dark-blue")
 root_tk = ctk.CTk()
 root_tk.geometry("500x550")
 
-# Create Frame_Windows (Root)
-frame = ctk.CTkFrame(master=root_tk, width=400, height=600)
-frame.pack()
 
 def Create_email():
     
@@ -50,18 +47,8 @@ def Create_email():
         list_Items_CX_NEW = [FullName_CreateSTR.get(), Age_CreateSTR.get(),  Phone_CreateSTR.get(), Email_STR.get(), select_Option_City.get(), Address_CreateSTR.get()]
         if any(not items for items in list_Items_CX_NEW):
                 print(list_Items_CX_NEW)
-                
-                # Configura el marco para la parte inferior
-                bottom_frame = ctk.CTkFrame(master=root_tk)
-                bottom_frame.grid(row=1, column=0, sticky="ew") 
-
-                # Configura el Label en el frame inferior
-                Error_Email = ctk.CTkLabel(bottom_frame, text="Campos vacíos", fg_color="red", font=("Arial", 15), height=50, text_color="purple")
-                Error_Email.pack(fill=ctk.X, side=ctk.BOTTOM)  
-
-                # Configura el peso de la fila y la columna para ocupar todo el espacio
-                root_tk.grid_columnconfigure(0, weight=1)
-                root_tk.grid_rowconfigure(0, weight=1)  # Asegúrate de que la fila 0 tiene peso
+                MessageFrame_Generation_CreateEmail("Empy fields, review all", "red", "white")
+            
         else: 
             # query to insert the new information of the client on the DB 
             query = "INSERT INTO cliente (nombre, edad, telefono, email, ciudad, direccion) VALUES (%s, %s, %s, %s, %s, %s);"
@@ -82,8 +69,7 @@ def Create_email():
 
             # Clean the windows (Root) and then gonna move the cx to create a new user
             root_tk.after(1000,  lambda: clear_frame(root_tk))
-            # root_tk.after(1000,  on_login)
-            exit()
+            root_tk.after(1000,  on_login)
         
             
     frame_create_Email = ctk.CTkFrame(master=root_tk, width=100, height=30)
@@ -117,21 +103,20 @@ def Create_email():
     entry_phone.grid(row=4, column=1, padx=(5,20), pady=(0,30))
     
     
-    # ----------------- MUST BE A LIST  OF OPTIONS  ----------------- 
     # label  city   
+    options = [
+        "Bogotá", "Medellín", "Cali", "Barranquilla", "Cartagena", "Cúcuta", 
+        "Bucaramanga", "Pereira", "Manizales", "Ibagué", "Santa Marta", 
+        "Villavicencio", "Pasto", "Montería", "Neiva", "Armenia", "Sincelejo", 
+        "Valledupar", "Popayán", "Tunja", "Riohacha", "Florencia", "Quibdó", 
+        "Yopal", "San Andrés", "Leticia", "Mocoa", "Puerto Carreño", 
+        "San José del Guaviare", "Inírida" 
+    ]
+    
     label_city = ctk.CTkLabel(frame_create_Email, text="City:")
     label_city.grid(row=5, column=0, pady=(0,30))
-    # Entry  city
+    # Entry Options city
     select_Option_City = ctk.StringVar(value="Options")
-    options = [
-    "Bogotá", "Medellín", "Cali", "Barranquilla", "Cartagena", "Cúcuta", 
-    "Bucaramanga", "Pereira", "Manizales", "Ibagué", "Santa Marta", 
-    "Villavicencio", "Pasto", "Montería", "Neiva", "Armenia", "Sincelejo", 
-    "Valledupar", "Popayán", "Tunja", "Riohacha", "Florencia", "Quibdó", 
-    "Yopal", "San Andrés", "Leticia", "Mocoa", "Puerto Carreño", 
-    "San José del Guaviare", "Inírida"
-]
-
     Label_Option_city = ctk.CTkOptionMenu(frame_create_Email, variable=select_Option_City, values=options)
     Label_Option_city.grid(row=5, column=1, padx=(5,20), pady=(0,30))
     
@@ -143,21 +128,59 @@ def Create_email():
     entry_address = ctk.CTkEntry(frame_create_Email, width=150, placeholder_text="Address:", textvariable=Address_CreateSTR)
     entry_address.grid(row=6, column=1, padx=(5,20), pady=(0,30))
     
-    # Button create Account (Sign yp)
+    # Button create Account (Sign up)
     button_Create_Email = ctk.CTkButton(frame_create_Email, text="Sign up", fg_color=("#DB3E39", "#821D1A"), command=Create_Account)
     button_Create_Email.grid(row=7, column=0, columnspan=3, padx=(5,20), pady=(0,30))
     
     
     
+ 
+ 
+ 
+def MessagesFrame_Generation(textFrame, fg_colorFrame, color_textFrame):
     
-     
+    global Error_Email  # Global variable
+    global Frame_Error 
     
+    if Error_Email is not None and Frame_Error is not None:
+        Error_Email.destroy()
+        Frame_Error.destroy()
 
+    
+    Frame_Error = ctk.CTkFrame(master=root_tk, width=200, height=60)
+    Frame_Error.pack(side=ctk.BOTTOM, fill=ctk.X)
+    
+    Error_Email = ctk.CTkLabel(Frame_Error,
+                               text=textFrame, 
+                               fg_color=fg_colorFrame,
+                               font=("Arial", 15),
+                               height=50,
+                               text_color=color_textFrame)
+    Error_Email.pack(fill=ctk.X) 
+    
+def MessageFrame_Generation_CreateEmail(textFrame, fg_colorFrame, color_textFrame):
+    
+    # Configura el marco para la parte inferior
+    bottom_frame = ctk.CTkFrame(master=root_tk)
+    bottom_frame.grid(row=1, column=0, sticky="ew") 
+
+    # Configura el Label en el frame inferior
+    Error_EmptyLabel = ctk.CTkLabel(bottom_frame,
+                                    text=textFrame,
+                                    fg_color=fg_colorFrame,
+                                    font=("Arial", 15),
+                                    height=50,
+                                    text_color=color_textFrame)
+    Error_EmptyLabel.pack(fill=ctk.X, side=ctk.BOTTOM)  
+
+    # Configura el peso de la fila y la columna para ocupar todo el espacio
+    root_tk.grid_columnconfigure(0, weight=1)
+    root_tk.grid_rowconfigure(0, weight=1)  # Asegúrate de que la fila 0 tiene peso
+    
 
 # function start or login into the  system
 def on_login():
-    global Error_Email  # Global variable
-    global Frame_Error 
+
     
     email_verify = Email_STR.get()
     # email_verify = "sdfsdf@gmail.oil.es"
@@ -165,9 +188,6 @@ def on_login():
     # Delete frame and label of error when the format is not valid at the email
     # Verify if those  fields are not empty, if they are  empty nothing happend
     # but is those variables already appear on the screen, they gonna be deleted
-    if Error_Email is not None and Frame_Error is not None:
-        Error_Email.destroy()
-        Frame_Error.destroy()
 
     if Validation_email(email_verify):  # Valid Email
         
@@ -186,12 +206,7 @@ def on_login():
             ctk.CTkLabel(new_window, text="Bienvenido!", font=("Arial", 20)).pack(pady=20)
         else:
             # If  the email doesn't exits on db, show the error message
-            Frame_Error = ctk.CTkFrame(master=root_tk, width=200, height=60)
-            Frame_Error.pack(side=ctk.BOTTOM, fill=ctk.X)
-            
-            Error_Email = ctk.CTkLabel(Frame_Error, text="No existe el correo en la base de datos", 
-                                   fg_color="red", font=("Arial", 15), height=50, text_color="purple")
-            Error_Email.pack(fill=ctk.X) 
+            MessagesFrame_Generation("NO existes en la DB", "red", "white")
             
             # Clean the windows (Root) and then gonna move the cx to create a new user
             root_tk.after(1000,  lambda: clear_frame(root_tk))
@@ -199,14 +214,13 @@ def on_login():
 
     else: 
         # If format of the email is not valid, gonna  show the error message
+        MessagesFrame_Generation("Formato de email invalido", "red", "white")
         
-        Frame_Error = ctk.CTkFrame(master=root_tk, width=200, height=60)
-        Frame_Error.pack(side=ctk.BOTTOM, fill=ctk.X)
-        
-        Error_Email = ctk.CTkLabel(Frame_Error, text="Formato de Correo inválido, intenta nuevamente", 
-                               fg_color="red", font=("Arial", 15), height=50)
-        Error_Email.pack(fill=ctk.X) 
+      
 
+# Create Frame_Windows (Root)
+frame = ctk.CTkFrame(master=root_tk, width=400, height=600)
+frame.pack()
 
 # Label Title of the program
 label = ctk.CTkLabel(frame, text="CustomerPurchaseManager", fg_color="transparent", font=("Arial", 25))

@@ -26,32 +26,68 @@ def Validation_email(email_patter):
     pattern = r"^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$"
     return re.match(pattern, email_patter) is not None
 
+    
+# Clear widgets of the main window after to verify the email or create a new user
+def clear_frame(Window):
+    for widget in Window.winfo_children():
+        widget.pack_forget()  # Ocultar cada widget en el fracme
+
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("dark-blue")
 
 # Create main Windows (Root)
 root_tk = ctk.CTk()
-root_tk.geometry("500x450")
+root_tk.geometry("500x550")
 
 # Create Frame_Windows (Root)
-frame = ctk.CTkFrame(master=root_tk, width=200, height=220)
+frame = ctk.CTkFrame(master=root_tk, width=400, height=600)
 frame.pack()
 
 def Create_email():
     
-    def saludo():
-        list_Items_CX_NEW = [FullName_CreateSTR.get(), Age_CreateSTR.get(),  Phone_CreateSTR.get(), Email_STR.get(), City_CreateSTR.get(), Address_CreateSTR.get()]
-
-        # query to insert the new information of the client on the DB 
-        query = "INSERT INTO cliente (nombre, edad, telefono, email, ciudad, direccion) VALUES (%s, %s, %s, %s, %s, %s);"
-        mycursor.execute(query,  list_Items_CX_NEW)
-        mydb.commit()
-        print(mycursor.rowcount, "Register(s) inserted in right way!")
+    def Create_Account():
         
+        list_Items_CX_NEW = [FullName_CreateSTR.get(), Age_CreateSTR.get(),  Phone_CreateSTR.get(), Email_STR.get(), select_Option_City.get(), Address_CreateSTR.get()]
+        if any(not items for items in list_Items_CX_NEW):
+                print(list_Items_CX_NEW)
+                
+                # Configura el marco para la parte inferior
+                bottom_frame = ctk.CTkFrame(master=root_tk)
+                bottom_frame.grid(row=1, column=0, sticky="ew") 
+
+                # Configura el Label en el frame inferior
+                Error_Email = ctk.CTkLabel(bottom_frame, text="Campos vacíos", fg_color="red", font=("Arial", 15), height=50, text_color="purple")
+                Error_Email.pack(fill=ctk.X, side=ctk.BOTTOM)  
+
+                # Configura el peso de la fila y la columna para ocupar todo el espacio
+                root_tk.grid_columnconfigure(0, weight=1)
+                root_tk.grid_rowconfigure(0, weight=1)  # Asegúrate de que la fila 0 tiene peso
+        else: 
+            # query to insert the new information of the client on the DB 
+            query = "INSERT INTO cliente (nombre, edad, telefono, email, ciudad, direccion) VALUES (%s, %s, %s, %s, %s, %s);"
+            mycursor.execute(query,  list_Items_CX_NEW)
+            mydb.commit()
+            
+            # Configura el marco para la parte inferior
+            bottom_frame = ctk.CTkFrame(master=root_tk)
+            bottom_frame.grid(row=1, column=0, sticky="ew") 
+
+            # Configura el Label en el frame inferior
+            Error_Email = ctk.CTkLabel(bottom_frame, text="Register (s) inserted in right way!", fg_color="lightgreen", font=("Arial", 15), height=50, text_color="purple")
+            Error_Email.pack(fill=ctk.X,  side=ctk.BOTTOM) 
+            
+            # Configura el peso de la fila y la columna para ocupar todo el espacio
+            root_tk.grid_columnconfigure(0, weight=1)
+            root_tk.grid_rowconfigure(0, weight=1)  # Asegúrate de que la fila 0 tiene peso
+
+            # Clean the windows (Root) and then gonna move the cx to create a new user
+            root_tk.after(1000,  lambda: clear_frame(root_tk))
+            # root_tk.after(1000,  on_login)
+            exit()
         
             
     frame_create_Email = ctk.CTkFrame(master=root_tk, width=100, height=30)
-    frame_create_Email.grid(row=0, column=0, pady=(20,0), padx=100)
+    frame_create_Email.grid(row=0, column=0, pady=(50,0), padx=120)
 
     label = ctk.CTkLabel(frame_create_Email, text="Create New Account", font=("Arial", 20))
     label.grid(row=1, column=0, pady=15, columnspan=3)
@@ -62,7 +98,7 @@ def Create_email():
     # Entry  Full name
     FullName_CreateSTR = ctk.StringVar()
     entry_name = ctk.CTkEntry(frame_create_Email, width=150, placeholder_text="Full Name", textvariable=FullName_CreateSTR)
-    entry_name.grid(row=2, column=1, padx=(5,30), pady=(0,30))
+    entry_name.grid(row=2, column=1, padx=(5,20), pady=(0,30))
     
      # Label Age
     label_age = ctk.CTkLabel(frame_create_Email, text="Age:")
@@ -70,7 +106,7 @@ def Create_email():
      # Entry Age
     Age_CreateSTR = ctk.StringVar()
     entry_age = ctk.CTkEntry(frame_create_Email, width=150, placeholder_text="Age", textvariable=Age_CreateSTR)
-    entry_age.grid(row=3, column=1, padx=(5,30), pady=(0,30))
+    entry_age.grid(row=3, column=1, padx=(5,20), pady=(0,30))
     
     #  Label Phone number
     label_phone = ctk.CTkLabel(frame_create_Email, text="Phone number:")
@@ -78,7 +114,7 @@ def Create_email():
     # Entry  Phone number
     Phone_CreateSTR = ctk.StringVar()
     entry_phone = ctk.CTkEntry(frame_create_Email, width=150, placeholder_text="Phone:", textvariable=Phone_CreateSTR)
-    entry_phone.grid(row=4, column=1, padx=(5,30), pady=(0,30))
+    entry_phone.grid(row=4, column=1, padx=(5,20), pady=(0,30))
     
     
     # ----------------- MUST BE A LIST  OF OPTIONS  ----------------- 
@@ -86,11 +122,18 @@ def Create_email():
     label_city = ctk.CTkLabel(frame_create_Email, text="City:")
     label_city.grid(row=5, column=0, pady=(0,30))
     # Entry  city
-    City_CreateSTR = ctk.StringVar()
-    entry_city = ctk.CTkEntry(frame_create_Email, width=150, placeholder_text="City:", textvariable=City_CreateSTR)
-    entry_city.grid(row=5, column=1, padx=(5,30), pady=(0,30))
-    # ----------------- MUST BE A LIST  OF OPTIONS  ----------------- 
+    select_Option_City = ctk.StringVar(value="Options")
+    options = [
+    "Bogotá", "Medellín", "Cali", "Barranquilla", "Cartagena", "Cúcuta", 
+    "Bucaramanga", "Pereira", "Manizales", "Ibagué", "Santa Marta", 
+    "Villavicencio", "Pasto", "Montería", "Neiva", "Armenia", "Sincelejo", 
+    "Valledupar", "Popayán", "Tunja", "Riohacha", "Florencia", "Quibdó", 
+    "Yopal", "San Andrés", "Leticia", "Mocoa", "Puerto Carreño", 
+    "San José del Guaviare", "Inírida"
+]
 
+    Label_Option_city = ctk.CTkOptionMenu(frame_create_Email, variable=select_Option_City, values=options)
+    Label_Option_city.grid(row=5, column=1, padx=(5,20), pady=(0,30))
     
     # Label address
     label_address = ctk.CTkLabel(frame_create_Email, text="Address:")
@@ -98,32 +141,18 @@ def Create_email():
     # Entry  address
     Address_CreateSTR = ctk.StringVar()
     entry_address = ctk.CTkEntry(frame_create_Email, width=150, placeholder_text="Address:", textvariable=Address_CreateSTR)
+    entry_address.grid(row=6, column=1, padx=(5,20), pady=(0,30))
+    
+    # Button create Account (Sign yp)
+    button_Create_Email = ctk.CTkButton(frame_create_Email, text="Sign up", fg_color=("#DB3E39", "#821D1A"), command=Create_Account)
+    button_Create_Email.grid(row=7, column=0, columnspan=3, padx=(5,20), pady=(0,30))
+    
+    
+    
+    
+     
+    
 
-    entry_address.grid(row=6, column=1, padx=(5,30), pady=(0,30))
-    
-    button_Create_Email = ctk.CTkButton(frame_create_Email, text="Sign up", fg_color=("#DB3E39", "#821D1A"), command=saludo)
-    button_Create_Email.grid(row=7, column=0, columnspan=3, padx=(5,30), pady=(0,30))
-    
-    
-    
-    
-    
-    # Request to the new user, the new information to create a row
-    # datos = ["nombre", "edad", "telefono", "ciudad", "direccion"]
-    # data_saved = []
-    
-    # for i in range(len(datos)):
-    #     data = input(f"digame su {datos[i]}: ")
-    #     data_saved.append(data)
-        
-    # print(data_saved)
-    
-    
-    
-# Clear widgets of the main window after to verify the email or create a new user
-def clear_frame():
-    for widget in root_tk.winfo_children():
-        widget.pack_forget()  # Ocultar cada widget en el frame
 
 # function start or login into the  system
 def on_login():
@@ -131,7 +160,7 @@ def on_login():
     global Frame_Error 
     
     email_verify = Email_STR.get()
-    # email_verify = "sdfsdf@gmail.com"
+    # email_verify = "sdfsdf@gmail.oil.es"
 
     # Delete frame and label of error when the format is not valid at the email
     # Verify if those  fields are not empty, if they are  empty nothing happend
@@ -150,10 +179,10 @@ def on_login():
         if len(result) > 0:
             
             # If  the email is already registered, show the welcome  message
-            new_window = ctk.CTkToplevel(root_tk)  # 
+            new_window = ctk.CTkToplevel(root_tk)  
             new_window.title("Hola")
             new_window.geometry("300x200")
-            clear_frame()  # Clear the widgets of the main windows (Root)
+            # clear_frame()  # Clear the widgets of the main windows (Root)
             ctk.CTkLabel(new_window, text="Bienvenido!", font=("Arial", 20)).pack(pady=20)
         else:
             # If  the email doesn't exits on db, show the error message
@@ -165,7 +194,7 @@ def on_login():
             Error_Email.pack(fill=ctk.X) 
             
             # Clean the windows (Root) and then gonna move the cx to create a new user
-            root_tk.after(1000,  clear_frame)
+            root_tk.after(1000,  lambda: clear_frame(root_tk))
             root_tk.after(1000,  Create_email)
 
     else: 

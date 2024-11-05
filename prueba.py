@@ -3,7 +3,8 @@ import re
 import mysql.connector
 import sys
 import io
-import time
+from PIL import Image
+
 
 # Configuration of Output a UTF-8
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -11,6 +12,11 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 # Global Variables
 Error_Email = None  # Declarar Error_Email globalmente
 Frame_Error = None  # Declarar Frame_Error globalmente
+
+# Colors_Error_incorrect info
+Color_Error_incorrect = '#f75555'
+Color_correct = '#88f17a'
+color_text_Message = '#f3f3f3'
 
 # Connection DB MYSQL
 mydb = mysql.connector.connect(
@@ -25,19 +31,18 @@ mycursor = mydb.cursor()
 def Validation_email(email_patter):
     pattern = r"^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$"
     return re.match(pattern, email_patter) is not None
-
     
 # Clear widgets of the main window after to verify the email or create a new user
 def clear_frame(Window):
     for widget in Window.winfo_children():
-        widget.pack_forget()  # Ocultar cada widget en el fracme
+        widget.destroy()  # Ocultar cada widget en el fracme
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("dark-blue")
 
 # Create main Windows (Root)
 root_tk = ctk.CTk()
-root_tk.geometry("500x550")
+root_tk.geometry("560x550") # (x,y)
 
 
 def Create_email():
@@ -46,31 +51,15 @@ def Create_email():
         
         list_Items_CX_NEW = [FullName_CreateSTR.get(), Age_CreateSTR.get(),  Phone_CreateSTR.get(), Email_STR.get(), select_Option_City.get(), Address_CreateSTR.get()]
         if any(not items for items in list_Items_CX_NEW):
-                print(list_Items_CX_NEW)
-                MessageFrame_Generation_CreateEmail("Empy fields, review all", "red", "white")
-            
+                MessageFrame_Generation_CreateEmail("Empy fields, review all", Color_Error_incorrect, color_text_Message)
         else: 
             # query to insert the new information of the client on the DB 
             query = "INSERT INTO cliente (nombre, edad, telefono, email, ciudad, direccion) VALUES (%s, %s, %s, %s, %s, %s);"
-            mycursor.execute(query,  list_Items_CX_NEW)
+            mycursor.execute(query, list_Items_CX_NEW)
             mydb.commit()
             
-            # Configura el marco para la parte inferior
-            bottom_frame = ctk.CTkFrame(master=root_tk)
-            bottom_frame.grid(row=1, column=0, sticky="ew") 
-
-            # Configura el Label en el frame inferior
-            Error_Email = ctk.CTkLabel(bottom_frame, text="Register (s) inserted in right way!", fg_color="lightgreen", font=("Arial", 15), height=50, text_color="purple")
-            Error_Email.pack(fill=ctk.X,  side=ctk.BOTTOM) 
-            
-            # Configura el peso de la fila y la columna para ocupar todo el espacio
-            root_tk.grid_columnconfigure(0, weight=1)
-            root_tk.grid_rowconfigure(0, weight=1)  # Asegúrate de que la fila 0 tiene peso
-
-            # Clean the windows (Root) and then gonna move the cx to create a new user
-            root_tk.after(1000,  lambda: clear_frame(root_tk))
-            root_tk.after(1000,  on_login)
-        
+            MessageFrame_Generation_CreateEmail("Register (s) inserted in right way!", Color_correct, color_text_Message)
+            root_tk.after(2000, root_tk.destroy)
             
     frame_create_Email = ctk.CTkFrame(master=root_tk, width=100, height=30)
     frame_create_Email.grid(row=0, column=0, pady=(50,0), padx=120)
@@ -145,8 +134,7 @@ def MessagesFrame_Generation(textFrame, fg_colorFrame, color_textFrame):
     if Error_Email is not None and Frame_Error is not None:
         Error_Email.destroy()
         Frame_Error.destroy()
-
-    
+        
     Frame_Error = ctk.CTkFrame(master=root_tk, width=200, height=60)
     Frame_Error.pack(side=ctk.BOTTOM, fill=ctk.X)
     
@@ -181,9 +169,8 @@ def MessageFrame_Generation_CreateEmail(textFrame, fg_colorFrame, color_textFram
 # function start or login into the  system
 def on_login():
 
-    
     email_verify = Email_STR.get()
-    # email_verify = "sdfsdf@gmail.oil.es"
+    email_verify = "carlos@gmail.com"
 
     # Delete frame and label of error when the format is not valid at the email
     # Verify if those  fields are not empty, if they are  empty nothing happend
@@ -199,14 +186,69 @@ def on_login():
         if len(result) > 0:
             
             # If  the email is already registered, show the welcome  message
-            new_window = ctk.CTkToplevel(root_tk)  
-            new_window.title("Hola")
-            new_window.geometry("300x200")
-            # clear_frame()  # Clear the widgets of the main windows (Root)
-            ctk.CTkLabel(new_window, text="Bienvenido!", font=("Arial", 20)).pack(pady=20)
+            clear_frame(root_tk)
+            
+            frame_Login_Done = ctk.CTkFrame(master=root_tk, width=270, height=250)
+            frame_Login_Done.grid(row=0, column=0, pady=(40,0), padx=50)
+
+            icon_image = ctk.CTkImage(dark_image=Image.open("Assets/Delcompra.png"), size=(20, 20))
+            button_ADD_Purchase = ctk.CTkButton(
+                                                frame_Login_Done,
+                                                text="Add Purchase",
+                                                fg_color="#51adee",
+                                                hover_color='#70bd99',
+                                                compound="right",
+                                                image=icon_image)
+            button_ADD_Purchase.grid(row=1, column=0, columnspan=2, pady=(50,30), padx=50)
+            
+            icon_image = ctk.CTkImage(dark_image=Image.open(r"F:\Locker\GEEK\PROYECTS\CustomerPurchaseManager\Delcompra.png"), size=(20, 20))
+            button_ADD_Purchase = ctk.CTkButton(
+                                                frame_Login_Done,
+                                                text="Delete Purchase",
+                                                fg_color='#ed5154',
+                                                hover_color='#70bd99',
+                                                compound="right",
+                                                image=icon_image)
+            button_ADD_Purchase.grid(row=2, column=0, columnspan=2, pady=(0,40), padx=50)
+            
+            icon_image = ctk.CTkImage(dark_image=Image.open(r"F:\Locker\GEEK\PROYECTS\CustomerPurchaseManager\Delcompra.png"), size=(20, 20))
+            button_ADD_Purchase = ctk.CTkButton(
+                                                frame_Login_Done,
+                                                text="",
+                                                fg_color='#1F5673',
+                                                compound="right",
+                                                image=icon_image,
+                                                width=25)
+            button_ADD_Purchase.grid(row=3, column=0, pady=(0,40), padx=50)
+
+
+            icon_image = ctk.CTkImage(dark_image=Image.open(r"F:\Locker\GEEK\PROYECTS\CustomerPurchaseManager\Delcompra.png"), size=(20, 20))
+            button_ADD_Purchase = ctk.CTkButton(
+                                                frame_Login_Done,
+                                                text="",
+                                                fg_color='#1F5673',
+                                                compound="right",
+                                                image=icon_image,
+                                                width=25)
+            button_ADD_Purchase.grid(row=3, column=1, pady=(0,40), padx=50)
+
+
+
+            
+            
+
+            
+            
+            
+            
+            # labelWelcomeBack =  ctk.CTkLabel(root_tk, text="Bienvenido!", text_color="white")
+            # labelWelcomeBack.grid(row=0, column=0)
+            
+            
+            
         else:
             # If  the email doesn't exits on db, show the error message
-            MessagesFrame_Generation("NO existes en la DB", "red", "white")
+            MessagesFrame_Generation("NO existes en la DB", Color_Error_incorrect, color_text_Message)
             
             # Clean the windows (Root) and then gonna move the cx to create a new user
             root_tk.after(1000,  lambda: clear_frame(root_tk))
@@ -214,7 +256,7 @@ def on_login():
 
     else: 
         # If format of the email is not valid, gonna  show the error message
-        MessagesFrame_Generation("Formato de email invalido", "red", "white")
+        MessagesFrame_Generation("Formato de email invalido", Color_Error_incorrect, color_text_Message)
         
       
 

@@ -191,7 +191,7 @@ def on_login():
             frame_Login_Done = ctk.CTkFrame(master=root_tk, width=270, height=250)
             frame_Login_Done.grid(row=0, column=0, pady=(40,0), padx=50)
 
-            icon_image = ctk.CTkImage(dark_image=Image.open("Assets/Delcompra.png"), size=(20, 20))
+            icon_image = ctk.CTkImage(dark_image=Image.open("https://raw.githubusercontent.com/Trex-Codes/CustomerPurchaseManager/Features/Assets/Addcompra.png"), size=(20, 20))
             button_ADD_Purchase = ctk.CTkButton(
                                                 frame_Login_Done,
                                                 text="Add Purchase",

@@ -14,10 +14,10 @@ global email_verify
 
 # Conexion Py con SQL DB remote
 mydb = mysql.connector.connect(
-    host= "192.168.1.13",
-    user= "UserLaptop",
-    password= "sebasmesi1305",
-    database= "company"    
+     host="localhost",        # Dirección del servidor MySQL
+    user="root",       # Tu usuario MySQL
+    password="Sebasmesi1305",# Tu contraseña MySQL
+    database="company" # Nombre de la base de datos"    
 )
 
 # Initiate instance of use MYSQL

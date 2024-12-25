@@ -20,10 +20,10 @@ color_text_Message = '#f3f3f3'
 
 # Connection DB MYSQL
 mydb = mysql.connector.connect(
-    host="192.168.1.13",
-    user="UserLaptop",
-    password="sebasmesi1305",
-    database="company"
+    host="localhost",        # Dirección del servidor MySQL
+    user="root",       # Tu usuario MySQL
+    password="Sebasmesi1305",# Tu contraseña MySQL
+    database="company" # Nombre de la base de datos
 )
 mycursor = mydb.cursor()
 
@@ -252,6 +252,23 @@ def on_login():
             
             
             
+            
+            # DELETE USER
+            urlDEL = "https://github.com/Trex-Codes/CustomerPurchaseManager/blob/Features/Assets/persona.png?raw=true"
+            responseUser = requests.get(urlDEL)
+            image_dataUser = io.BytesIO(responseUser.content)
+            
+            icon_imageUser = ctk.CTkImage(dark_image=Image.open(image_dataUser), size=(20, 20))
+
+            button_DEL_Purchase = ctk.CTkButton(
+                                               frame_Login_Done,
+                                                text="Update User",
+                                                fg_color='#1F5673',
+                                                compound="right",
+                                                image=icon_imageUser,
+                                                width=25)
+            button_DEL_Purchase.grid(row=3, column=1, columnspan=2, pady=(30,30), padx=50)
+                                    
             
             
             

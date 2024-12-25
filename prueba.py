@@ -2,10 +2,10 @@ import customtkinter as ctk
 import re
 import mysql.connector
 import sys
-import io
+
+import requests
 from PIL import Image
-
-
+import io
 # Configuration of Output a UTF-8
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
@@ -188,49 +188,87 @@ def on_login():
             # If  the email is already registered, show the welcome  message
             clear_frame(root_tk)
             
+            # ADD PURCHASE
+            urlADD = "https://github.com/Trex-Codes/CustomerPurchaseManager/blob/Features/Assets/Delcompra.png?raw=true"
+            responseAdd = requests.get(urlADD)
+            image_dataAdd = io.BytesIO(responseAdd.content)
+            
             frame_Login_Done = ctk.CTkFrame(master=root_tk, width=270, height=250)
             frame_Login_Done.grid(row=0, column=0, pady=(40,0), padx=50)
 
-            icon_image = ctk.CTkImage(dark_image=Image.open("https://raw.githubusercontent.com/Trex-Codes/CustomerPurchaseManager/Features/Assets/Addcompra.png"), size=(20, 20))
+            icon_imageAdd = ctk.CTkImage(dark_image=Image.open(image_dataAdd), size=(20, 20))
+
             button_ADD_Purchase = ctk.CTkButton(
                                                 frame_Login_Done,
                                                 text="Add Purchase",
                                                 fg_color="#51adee",
                                                 hover_color='#70bd99',
                                                 compound="right",
-                                                image=icon_image)
+                                                image=icon_imageAdd)
             button_ADD_Purchase.grid(row=1, column=0, columnspan=2, pady=(50,30), padx=50)
             
-            icon_image = ctk.CTkImage(dark_image=Image.open(r"F:\Locker\GEEK\PROYECTS\CustomerPurchaseManager\Delcompra.png"), size=(20, 20))
-            button_ADD_Purchase = ctk.CTkButton(
+            
+            
+
+            
+            # DELETE PURCHASE
+            urlDEL = "https://github.com/Trex-Codes/CustomerPurchaseManager/blob/Features/Assets/Addcompra.png?raw=true"
+            responseDel = requests.get(urlDEL)
+            image_dataDel = io.BytesIO(responseDel.content)
+            
+            icon_imageDel = ctk.CTkImage(dark_image=Image.open(image_dataDel), size=(20, 20))
+
+            button_DEL_Purchase = ctk.CTkButton(
                                                 frame_Login_Done,
                                                 text="Delete Purchase",
                                                 fg_color='#ed5154',
                                                 hover_color='#70bd99',
                                                 compound="right",
-                                                image=icon_image)
-            button_ADD_Purchase.grid(row=2, column=0, columnspan=2, pady=(0,40), padx=50)
+                                                image=icon_imageDel)
+            button_DEL_Purchase.grid(row=2, column=1, columnspan=2, pady=(30,30), padx=50)
             
-            icon_image = ctk.CTkImage(dark_image=Image.open(r"F:\Locker\GEEK\PROYECTS\CustomerPurchaseManager\Delcompra.png"), size=(20, 20))
-            button_ADD_Purchase = ctk.CTkButton(
-                                                frame_Login_Done,
-                                                text="",
+            
+            
+            
+            
+            # UPDATE USER
+            urlDEL = "https://github.com/Trex-Codes/CustomerPurchaseManager/blob/Features/Assets/persona.png?raw=true"
+            responseUser = requests.get(urlDEL)
+            image_dataUser = io.BytesIO(responseUser.content)
+            
+            icon_imageUser = ctk.CTkImage(dark_image=Image.open(image_dataUser), size=(20, 20))
+
+            button_DEL_Purchase = ctk.CTkButton(
+                                               frame_Login_Done,
+                                                text="Update User",
                                                 fg_color='#1F5673',
                                                 compound="right",
-                                                image=icon_image,
+                                                image=icon_imageUser,
                                                 width=25)
-            button_ADD_Purchase.grid(row=3, column=0, pady=(0,40), padx=50)
-
-
-            icon_image = ctk.CTkImage(dark_image=Image.open(r"F:\Locker\GEEK\PROYECTS\CustomerPurchaseManager\Delcompra.png"), size=(20, 20))
-            button_ADD_Purchase = ctk.CTkButton(
-                                                frame_Login_Done,
-                                                text="",
-                                                fg_color='#1F5673',
-                                                compound="right",
-                                                image=icon_image,
-                                                width=25)
-            button_ADD_Purchase.grid(row=3, column=1, pady=(0,40), padx=50)
+            button_DEL_Purchase.grid(row=3, column=1, columnspan=2, pady=(30,30), padx=50)
+                        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+         
 
 
 

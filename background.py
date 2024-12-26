@@ -1,32 +1,34 @@
 import customtkinter as ctk
 from PIL import Image, ImageTk
+import requests
+from io import BytesIO
 
 def update_background(event):
     # Get the current window size
     width = event.width
     height = event.height
-    
+
     # Resize the background image
     bg_image_resized = bg_image.resize((width, height))
     bg_photo = ImageTk.PhotoImage(bg_image_resized)
-    
+
     # Update the background image in the Label
     background_label.configure(image=bg_photo)
     background_label.image = bg_photo  # Keep a reference to the image
 
 # Initialize window
-ctk.set_appearance_mode("System")
-ctk.set_default_color_theme("blue")
 
 app = ctk.CTk()
 app.title("Responsive Window")
 app.geometry("600x400")
 
-# Local image path
-image_path = r"C:/Users/USUARIO/Downloads/IMAGEN.jpeg"  # Make sure to use 'r' for paths in Windows
+# Fetch image from URL
+image_url = "https://github.com/Trex-Codes/CustomerPurchaseManager/blob/Features/Assets/imagen.jpeg?raw=true"
+response = requests.get(image_url)
+image_data = BytesIO(response.content)
 
 # Load the original image
-bg_image = Image.open(image_path)
+bg_image = Image.open(image_data)
 
 # Create a Frame with the background image
 bg_image_resized = bg_image.resize((600, 400))  # Initially adjust the size of the image
@@ -44,10 +46,8 @@ button.place(relx=0.5, rely=0.5, anchor="center")
 
 # Adjust the position of the Label to be lower
 label = ctk.CTkLabel(app, text="Welcome Back to Our Website!")
-label.place(relx=0.5, rely=0.4, anchor="center")  
+label.place(relx=0.5, rely=0.4, anchor="center")
 
-# The Label should have no background
-label.configure(fg_color="transparent", text_color="white")  # Transparent background, white text
 
 # Bind the resize event to update the background
 app.bind("<Configure>", update_background)

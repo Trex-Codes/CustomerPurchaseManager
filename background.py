@@ -50,7 +50,7 @@ def func():
             icon_image_resized = icon_image.resize((20, 20))  # Resize the icon to a smaller size
             icon_photo = ImageTk.PhotoImage(icon_image_resized)
 
-            login_button = ctk.CTkButton(right_frame, text="Add purchase", width=150, fg_color="#5DA1FA", command=func, image=icon_photo, compound="right")
+            login_button = ctk.CTkButton(right_frame, text="Add purchase", width=150, fg_color="#5AAA95", command=func, image=icon_photo, compound="right")
             login_button.place(x=20, y=30)  # Position the entry relative to the frame
 
 
@@ -65,16 +65,51 @@ def func():
             icon_photo_delete = ImageTk.PhotoImage(icon_image_resized_delete)
             
 
-            login_button = ctk.CTkButton(right_frame, text="Delete Purchase", width=150, fg_color="#5DA1FA", command=func, image=icon_photo_delete, compound="right")
+            login_button = ctk.CTkButton(right_frame, text="Delete Purchase", width=150, fg_color="#5AAA95", command=func, image=icon_photo_delete, compound="right")
             login_button.place(x=20, y=100)  # Position the entry relative to the frame
 
-            login_button = ctk.CTkButton(right_frame, text="View purchases", width=150, fg_color="#5DA1FA", command=func)
-            login_button.place(x=20, y=170)  # Position the entry relative to the frame     
 
-            login_button = ctk.CTkButton(right_frame, text="1", width=50, height=40, fg_color="#5DA1FA", command=func)
-            login_button.place(x=40, y=230)  # Position the entry relative to the frame                 
 
-            login_button = ctk.CTkButton(right_frame, text="2", width=50, height=40, fg_color="#5DA1FA", command=func)
+            # Fetch the image icon for "View Purchases" from URL (bolsa.png)
+            image_url_view = "https://github.com/Trex-Codes/CustomerPurchaseManager/blob/Features/Assets/bolsa.png?raw=true"
+            response_view = requests.get(image_url_view)
+            icon_data_view = BytesIO(response_view.content)
+
+            # Load and resize the image icon
+            icon_image_view = Image.open(icon_data_view)
+            icon_image_resized_view = icon_image_view.resize((20, 20))  # Resize the icon to a smaller size
+            icon_photo_view = ImageTk.PhotoImage(icon_image_resized_view)
+
+            login_button = ctk.CTkButton(right_frame, text="View purchases", width=150, fg_color="#5AAA95", command=func, image=icon_photo_view, compound="right")
+            login_button.place(x=20, y=170)  # Position the entry relative to the frame   
+
+
+            
+                        # Fetch the image icon for "User Profile" from URL (persona.png)
+            image_url_persona = "https://github.com/Trex-Codes/CustomerPurchaseManager/blob/Features/Assets/persona.png?raw=true"
+            response_persona = requests.get(image_url_persona)
+            icon_data_persona = BytesIO(response_persona.content)
+
+            # Load and resize the image icon
+            icon_image_persona = Image.open(icon_data_persona)
+            icon_image_resized_persona = icon_image_persona.resize((20, 20))  # Resize the icon to a smaller size
+            icon_photo_persona = ImageTk.PhotoImage(icon_image_resized_persona)  
+
+            login_button = ctk.CTkButton(right_frame, text="", width=50, height=40, fg_color="#FFD639", command=func, image=icon_photo_persona)
+            login_button.place(x=40, y=230)  # Position the entry relative to the frame      
+
+
+                        # Fetch the image icon for "Delete User" from URL (DelUser.png)
+            image_url_del_persona = "https://github.com/Trex-Codes/CustomerPurchaseManager/blob/Features/Assets/DelUser.png?raw=true"
+            response_del_persona = requests.get(image_url_del_persona)
+            icon_data_del_persona = BytesIO(response_del_persona.content)
+
+            # Load and resize the image icon
+            icon_image_del_persona = Image.open(icon_data_del_persona)
+            icon_image_resized_del_persona = icon_image_del_persona.resize((20, 20))  # Resize the icon to a smaller size
+            icon_photo_del_persona = ImageTk.PhotoImage(icon_image_resized_del_persona)
+
+            login_button = ctk.CTkButton(right_frame, text="", width=50, height=40, fg_color="#F45B69", command=func,image=icon_photo_del_persona )
             login_button.place(x=110, y=230)  # Position the entry relative to the frame                 
                    
 
